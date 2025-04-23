@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sign Up | Leaf Disease Detection</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    nav {
+      flex-shrink: 0;
+    }
+    .main-content {
+      flex-grow: 1;
+      display: flex;
+    }
+    .split-left {
+      flex: 1;
+      background-color: #d7efd7;
+      color: #1f2937;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 3rem;
+      text-align: center;
+    }
+    .split-left h1 {
+      font-weight: bold;
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+    .split-left img {
+      max-width: 80%;
+      height: auto;
+    }
+    .split-right {
+      flex: 1;
+      background: #f8fef9;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 60px;
+    }
+    .form-control {
+      border-radius: 12px;
+      padding: 12px;
+    }
+    .btn-green {
+      background-color: #4CAF50;
+      color: white;
+      border-radius: 12px;
+      padding: 12px;
+      width: 100%;
+      font-weight: bold;
+    }
+    .btn-green:hover {
+      background-color: #45a049;
+    }
+    .form-check {
+      font-size: 0.9rem;
+      color: #4b5563;
+    }
+    .form-footer {
+      text-align: center;
+      margin-top: 1.5rem;
+    }
+    .form-footer a {
+      color: #22c55e;
+      text-decoration: none;
+    }
+    .form-footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-success px-4">
+    <a class="navbar-brand" href="/">🍃 Leaf Detector</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+      <ul class="navbar-nav text-center">
+        <li class="nav-item"><a class="nav-link" href="/home">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="/about">Contact</a></li>
+        <% if (typeof session !== 'undefined' && session.email) { %>
+          <li class="nav-item"><a class="nav-link" href="/predict">Predict</a></li>
+          <li class="nav-item"><a class="nav-link" href="/profile">History</a></li>
+        <% } %>
+      </ul>
+    </div>
+
+    <div class="d-flex ms-auto">
+      <% if (typeof session !== 'undefined' && session.email) { %>
+        <a href="/logout" class="btn btn-danger">Logout</a>
+      <% } else { %>
+        <a href="/login" class="btn btn-light me-2">Login</a>
+        <a href="/signup" class="btn btn-warning">Signup</a>
+      <% } %>
+    </div>
+  </nav>
+
+  <!-- Signup Form Layout -->
+  <div class="main-content">
+    <div class="split-left">
+      <h1>Defy the Past<br />Step into the Future</h1>
+      <img src="/p1.png" alt="Potato Leaf" />
+    </div>
+
+    <div class="split-right">
+      <h2 class="mb-4 fw-bold">Create Account</h2>
+      <form action="/register" method="POST">
+        <div class="mb-3">
+          <input type="text" class="form-control" name="fullname" placeholder="Full Name" required />
+        </div>
+        <div class="mb-3">
+          <input type="email" class="form-control" name="username" placeholder="Email" required />
+        </div>
+        <div class="mb-3 position-relative">
+          <input type="password" class="form-control" name="password" placeholder="Password" required />
+        </div>
+        <div class="mb-3 position-relative">
+          <input type="password" class="form-control" name="confirmPassword" placeholder="Confirm Password" required />
+        </div>
+        <div class="form-check mb-3">
+          <input class="form-check-input" type="checkbox" required id="termsCheck" />
+          <label class="form-check-label" for="termsCheck">
+            I have read and agreed to the Terms of Service and Privacy Policy
+          </label>
+        </div>
+        <button type="submit" class="btn btn-green">Create Account</button>
+      </form>
+
+      <div class="form-footer">
+        Already have an account? <a href="/login">Log In</a>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
