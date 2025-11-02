@@ -11,6 +11,10 @@ import cookieSession from "cookie-session";
 import nodemailer from "nodemailer";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+import dotenv from "dotenv";
+
+// Load environment variables
+dotenv.config();
 
 // ✅ Setup for __dirname in ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -18,14 +22,21 @@ const __dirname = dirname(__filename);
 
 // ✅ Initialize express app
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 // ✅ MongoDB connection
-mongoose.connect("mongodb://127.0.0.1:27017/studentDB", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-  .then(() => console.log("✅ MongoDB Connected"))
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/studentDB";
+
+console.log("🔌 Connecting to MongoDB...");
+mongoose.connect(MONGODB_URI)
+  .then(() => {
+    console.log("✅ MongoDB Connected");
+    if (MONGODB_URI.includes('mongodb+srv')) {
+      console.log("☁️  Using MongoDB Atlas (Cloud)");
+    } else {
+      console.log("💻 Using Local MongoDB");
+    }
+  })
   .catch((err) => console.error("❌ MongoDB Connection Error:", err));
 
 // ✅ Schemas
@@ -51,7 +62,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(cookieSession({
   name: "session",
-  keys: ["your_secret_key"],
+  keys: [process.env.SESSION_SECRET || "your_secret_key"],
   maxAge: 24 * 60 * 60 * 1000,
 }));
 
@@ -128,7 +139,9 @@ app.post("/predict", upload.single("image"), async (req, res) => {
     const formData = new FormData();
     formData.append("image", fs.createReadStream(filePath));
 
-    const response = await axios.post("http://127.0.0.1:5000/predict", formData, {
+    // Use environment variable for Flask API URL
+    const FLASK_API_URL = process.env.FLASK_API_URL || "http://127.0.0.1:5000";
+    const response = await axios.post(`${FLASK_API_URL}/predict`, formData, {
       headers: formData.getHeaders(),
     });
 
